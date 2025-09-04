@@ -2,13 +2,14 @@ package br.com.fiap.onghub.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
@@ -29,9 +30,7 @@ fun Header(
     titulo: String,
     onButtonClick: () -> Unit
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp)
@@ -39,20 +38,25 @@ fun Header(
     ) {
         OutlinedButton(
             onClick = onButtonClick,
-            modifier = Modifier.offset(x = (-10.dp)),
+            modifier = Modifier.align(Alignment.CenterStart).offset(x = (-11.dp)),
+            contentPadding = PaddingValues(0.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(id = R.color.azul_padrao),
                 contentColor = Color.White
             ),
             border = BorderStroke(width = 1.dp, color = colorResource(id = R.color.azul_padrao))
         ) {
-            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "")
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                contentDescription = "Ícone de seta",
+                modifier = Modifier.size(30.dp)
+            )
         }
         Text(
             text = titulo,
-            modifier = Modifier.offset((-10.dp)),
+            modifier = Modifier.align(Alignment.Center),
             fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.ExtraBold,
             fontFamily = nunito,
             color = Color.White
         )

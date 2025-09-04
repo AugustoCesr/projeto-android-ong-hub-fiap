@@ -31,13 +31,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import br.com.fiap.onghub.R
 import br.com.fiap.onghub.components.HeaderOng
 import br.com.fiap.onghub.components.OngHomeCard
 import br.com.fiap.onghub.ui.theme.roboto
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(modifier: Modifier = Modifier, navController: NavController) {
     Box(modifier = modifier) {
         Column() {
             HeaderOng()
@@ -76,7 +77,9 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                     titulo = "Meio Ambiente & Bem-Estar Animal",
                     descricao = "Organizações dedicadas à preservação ambiental, proteção animal e sustentabilidade",
                     textoBotao = "Explorar ONGs",
-                    onButtonClick = {}
+                    onButtonClick = {
+                        navController.navigate("organizacoes")
+                    }
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 OngHomeCard(

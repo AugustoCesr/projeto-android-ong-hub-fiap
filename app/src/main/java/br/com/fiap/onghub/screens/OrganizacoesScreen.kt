@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import br.com.fiap.onghub.R
 import br.com.fiap.onghub.components.Header
 import br.com.fiap.onghub.components.OrganizacaoCard
@@ -25,12 +26,14 @@ import br.com.fiap.onghub.components.TipoOngCard
 import br.com.fiap.onghub.ui.theme.roboto
 
 @Composable
-fun OrganizacoesScreen(modifier: Modifier = Modifier) {
+fun OrganizacoesScreen(modifier: Modifier = Modifier, navController: NavController) {
     Box(modifier = modifier) {
         Column() {
             Header(
                 titulo = "Meio Ambiente & Bem-Estar Animal",
-                onButtonClick = {}
+                onButtonClick = {
+                    navController.navigate("home")
+                }
             )
             Column(modifier = Modifier
                 .verticalScroll(rememberScrollState())
@@ -65,7 +68,9 @@ fun OrganizacoesScreen(modifier: Modifier = Modifier) {
                     descricaoOng = "Conservação de tartarugas marinhas e proteção dos oceanos brasileiros",
                     localidade = "Praia do Forte, BA",
                     textoBotao = "Ver detalhes",
-                    onButtonClick = {}
+                    onButtonClick = {
+                        navController.navigate("detalhesOrganizacoes")
+                    }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 OrganizacaoCard(
