@@ -19,6 +19,7 @@ class MainActivity : ComponentActivity() {
             ONGHubTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     HomeScreen(modifier = Modifier.padding(innerPadding))
+//                    OrganizacoesScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }

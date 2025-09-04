@@ -32,15 +32,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.fiap.onghub.R
-import br.com.fiap.onghub.components.Header
-import br.com.fiap.onghub.components.OngCard
+import br.com.fiap.onghub.components.HeaderOng
+import br.com.fiap.onghub.components.OngHomeCard
 import br.com.fiap.onghub.ui.theme.roboto
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
     Box(modifier = modifier) {
         Column() {
-            Header()
+            HeaderOng()
             Column(modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .padding(start = 16.dp, end = 16.dp, bottom = 16.dp, top = 32.dp)
@@ -70,30 +70,30 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                OngCard(
+                OngHomeCard(
                     imagem = R.drawable.plantinha,
                     imagemDescricao = "Imagem de uma plantinha com fundo verde",
                     titulo = "Meio Ambiente & Bem-Estar Animal",
                     descricao = "Organizações dedicadas à preservação ambiental, proteção animal e sustentabilidade",
-                    textoBotao = "Explorar ONGs  >",
+                    textoBotao = "Explorar ONGs",
                     onButtonClick = {}
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                OngCard(
+                OngHomeCard(
                     imagem = R.drawable.livros,
                     imagemDescricao = "Imagem de livros com fundo azul",
                     titulo = "Educação & Desenvolvimento Social",
                     descricao = "ONGs focadas em educação, capacitação profissional e desenvolvimento comunitário",
-                    textoBotao = "Explorar ONGs  >",
+                    textoBotao = "Explorar ONGs",
                     onButtonClick = {}
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                OngCard(
+                OngHomeCard(
                     imagem = R.drawable.coracao,
                     imagemDescricao = "Imagem de um coração com fundo vermelho",
                     titulo = "Saúde & Direitos Humanos",
                     descricao = "Organizações que trabalham com saúde pública, direitos humanos e assistência social",
-                    textoBotao = "Explorar ONGs  >",
+                    textoBotao = "Explorar ONGs",
                     onButtonClick = {}
                 )
                 Spacer(modifier = Modifier.height(25.dp))
@@ -103,12 +103,14 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                     color = Color.LightGray
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                Button(onClick = {}, modifier = Modifier
+                Button(onClick = {},
+                    modifier = Modifier
                     .fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = colorResource(id = R.color.azul_padrao),
                         contentColor = Color.White
-                    )
+                    ),
+                    elevation = ButtonDefaults.buttonElevation(4.dp)
                 ) {
                     Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Três pontos vertical")
                     Text(
