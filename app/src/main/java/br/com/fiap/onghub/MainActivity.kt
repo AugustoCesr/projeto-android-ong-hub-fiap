@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import br.com.fiap.onghub.screens.DetalhesOrganizacoesScreen
+import br.com.fiap.onghub.screens.DicasDeVoluntarioScreen
 import br.com.fiap.onghub.screens.HomeScreen
 import br.com.fiap.onghub.screens.OrganizacoesScreen
 import br.com.fiap.onghub.ui.theme.ONGHubTheme
@@ -49,6 +50,10 @@ class MainActivity : ComponentActivity() {
                                 navController = navController
                             )
                         }
+                        composable("dicasVoluntariado") {
+                            DicasDeVoluntarioScreen(navController)
+                        }
+
                     }
                 }
             }
