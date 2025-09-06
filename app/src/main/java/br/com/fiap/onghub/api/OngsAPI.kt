@@ -13,6 +13,7 @@ import retrofit2.http.Query
 interface OngsApi {
     @GET("api/ongs")
     suspend fun getOngsRaw(
+        @Query("id") id: String? = null,
         @Query("name") name: String? = null,
         @Query("city") city: String? = null,
         @Query("state") state: String? = null,

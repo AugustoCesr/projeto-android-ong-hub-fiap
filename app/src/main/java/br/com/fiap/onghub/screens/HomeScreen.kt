@@ -135,7 +135,7 @@ fun HomeScreen(
             contentPadding = PaddingValues(bottom = 12.dp)
         ) {
             items(ui.items) { ong ->
-                ElevatedCard(onClick = { /* navController?.navigate("detalhesOrganizacoes/${ong.id}") */ }) {
+                ElevatedCard(onClick = { navController.navigate("detalhesOrganizacoes/${ong.id}") }) {
                     Column(Modifier.fillMaxWidth().padding(12.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             AsyncImage(

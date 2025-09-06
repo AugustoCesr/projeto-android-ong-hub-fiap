@@ -1,5 +1,6 @@
 package br.com.fiap.onghub.api
 
+import br.com.fiap.onghub.api.response.ONG
 import br.com.fiap.onghub.api.response.OngApiResponse
 import br.com.fiap.onghub.screens.Category
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -32,6 +33,16 @@ class OngsRepository(
         body.use { rb ->
             rb.byteStream().use { stream ->
                 return json.decodeFromStream<OngApiResponse>(stream)
+            }
+        }
+    }
+
+    suspend fun fetchOngById(id: String): ONG? {
+        val body = api.getOngsRaw(id = id, limit = 1)
+        body.use { rb ->
+            rb.byteStream().use { stream ->
+                val resp = json.decodeFromStream<OngApiResponse>(stream)
+                return resp.data.firstOrNull()
             }
         }
     }

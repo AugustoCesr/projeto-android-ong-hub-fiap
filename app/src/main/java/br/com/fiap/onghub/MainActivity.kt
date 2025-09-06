@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import br.com.fiap.onghub.screens.DetalhesOrganizacoesScreen
 import br.com.fiap.onghub.screens.HomeScreen
 import br.com.fiap.onghub.screens.OrganizacoesScreen
@@ -38,7 +40,10 @@ class MainActivity : ComponentActivity() {
                                 navController = navController
                             )
                         }
-                        composable(route = "detalhesOrganizacoes") {
+                        composable(
+                            route = "detalhesOrganizacoes/{ongId}",
+                            arguments = listOf(navArgument("ongId") { type = NavType.StringType })
+                            ) {
                             DetalhesOrganizacoesScreen(
                                 modifier = Modifier.padding(innerPadding),
                                 navController = navController
