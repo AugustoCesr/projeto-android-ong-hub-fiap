@@ -28,7 +28,8 @@ class MainActivity : ComponentActivity() {
                         composable(route = "home") {
                             HomeScreen(
                                 modifier = Modifier.padding(innerPadding),
-                                navController = navController
+                                navController = navController,
+                                contentPadding = innerPadding
                             )
                         }
                         composable(route = "organizacoes") {
