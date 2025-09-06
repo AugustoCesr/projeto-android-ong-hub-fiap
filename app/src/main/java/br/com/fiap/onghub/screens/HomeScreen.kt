@@ -1,6 +1,7 @@
 package br.com.fiap.onghub.screens
 
 import androidx.annotation.ColorLong
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -20,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -36,9 +38,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import br.com.fiap.onghub.R
 import br.com.fiap.onghub.components.HeaderOng
 import br.com.fiap.onghub.ui.home.HomeViewModel
 import coil.compose.AsyncImage
@@ -101,6 +105,17 @@ fun HomeScreen(
                 vm.onAddressChange("")
                 vm.applyAddress()
             }) { Text("Limpar") }
+            OutlinedButton(onClick = {
+                navController.navigate("dicasVoluntariado")
+            },
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = Color.White,
+                    containerColor = colorResource(id = R.color.azul_padrao)
+                ),
+                border = BorderStroke(1.dp, colorResource(id = R.color.azul_padrao))
+            ) {
+                Text(text = "Dicas")
+            }
         }
 
         if (ui.categories.isNotEmpty()) {
