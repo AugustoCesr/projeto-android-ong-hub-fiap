@@ -1,5 +1,6 @@
 package br.com.fiap.onghub.screens
 
+import androidx.annotation.ColorLong
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -21,6 +22,7 @@ import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -32,20 +34,25 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import br.com.fiap.onghub.components.HeaderOng
 import br.com.fiap.onghub.ui.home.HomeViewModel
 import coil.compose.AsyncImage
 
-enum class Category(val label: String) {
-    EDUCATION("Educação"),
-    ANIMALS("Animais"),
-    CHILDREN("Crianças"),
-    ELDERLY("Idosos"),
-    SUSTAINABILITY("Sustentabilidade")
+enum class Category(val label: String, @ColorLong val colorHex: Long) {
+    EDUCATION("Educação", 0xFF3B82F6),
+    ANIMALS("Animais", 0xFFEC4899),
+    CHILDREN("Crianças", 0xFF8B5CF6),
+    ELDERLY("Idosos", 0xFFF59E0B),
+    SUSTAINABILITY("Sustentabilidade", 0xFF16A34A)
 }
+
+val Category.color: Color
+    get() = Color(colorHex)
 
 @Composable
 fun HomeScreen(
@@ -67,8 +74,7 @@ fun HomeScreen(
             ),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        Text("ONGHub", style = MaterialTheme.typography.headlineSmall)
-        Text("Encontre iniciativas perto de você", color = MaterialTheme.colorScheme.onSurfaceVariant)
+        HeaderOng()
 
         OutlinedTextField(
             value = ui.addressInput,
@@ -98,11 +104,26 @@ fun HomeScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 ui.categories.forEach { cat ->
+                    val selected = ui.selectedCategory == cat
                     FilterChip(
-                        selected = ui.selectedCategory == cat,
+                        selected = selected,
                         onClick = { vm.toggleCategory(cat) },
                         shape = CircleShape,
-                        label = { Text(cat.label) }
+                        label = { Text(cat.label) },
+                        colors = FilterChipDefaults.filterChipColors(
+                            containerColor = cat.color.copy(alpha = 0.16f),
+                            labelColor = cat.color,
+                            iconColor = cat.color,
+                            selectedContainerColor = cat.color,
+                            selectedLabelColor = Color.White,
+                            selectedLeadingIconColor = Color.White
+                        ),
+                        border = FilterChipDefaults.filterChipBorder(
+                            borderColor = cat.color.copy(alpha = 0.6f),
+                            selectedBorderColor = cat.color,
+                            enabled = true,
+                            selected = selected,
+                        )
                     )
                 }
             }
