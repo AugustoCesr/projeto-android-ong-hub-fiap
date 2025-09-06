@@ -44,7 +44,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import br.com.fiap.onghub.R
 import br.com.fiap.onghub.components.HeaderOng
-import br.com.fiap.onghub.ui.home.HomeViewModel
+import br.com.fiap.onghub.ui.home.model.HomeViewModel
 import coil.compose.AsyncImage
 import kotlinx.serialization.SerialName
 

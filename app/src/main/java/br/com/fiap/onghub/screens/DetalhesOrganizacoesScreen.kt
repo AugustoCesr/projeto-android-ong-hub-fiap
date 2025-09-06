@@ -1,11 +1,6 @@
 package br.com.fiap.onghub.screens
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.net.Uri
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -30,7 +25,6 @@ import androidx.compose.material.icons.rounded.Phone
 import androidx.compose.material.icons.rounded.Pix
 import androidx.compose.material.icons.rounded.Place
 import androidx.compose.material.icons.rounded.Public
-import androidx.compose.material.icons.rounded.VolunteerActivism
 import androidx.compose.material.icons.rounded.Whatsapp
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
@@ -52,11 +46,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import br.com.fiap.onghub.ui.home.DetalheUiState
-import br.com.fiap.onghub.ui.home.DetalheViewModel
+import br.com.fiap.onghub.ui.home.model.DetalheUiState
+import br.com.fiap.onghub.ui.home.model.DetalheViewModel
 import coil.compose.AsyncImage
 import androidx.core.net.toUri
 
