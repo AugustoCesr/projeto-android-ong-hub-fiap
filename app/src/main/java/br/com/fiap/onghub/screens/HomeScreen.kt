@@ -45,14 +45,20 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import br.com.fiap.onghub.R
 import br.com.fiap.onghub.components.HeaderOng
-import br.com.fiap.onghub.ui.home.HomeViewModel
+import br.com.fiap.onghub.ui.home.model.HomeViewModel
 import coil.compose.AsyncImage
+import kotlinx.serialization.SerialName
 
 enum class Category(val label: String, @ColorLong val colorHex: Long) {
+    @SerialName("Educação")
     EDUCATION("Educação", 0xFF3B82F6),
+    @SerialName("Animais")
     ANIMALS("Animais", 0xFFEC4899),
+    @SerialName("Crianças")
     CHILDREN("Crianças", 0xFF8B5CF6),
+    @SerialName("Idosos")
     ELDERLY("Idosos", 0xFFF59E0B),
+    @SerialName("Sustentabilidade")
     SUSTAINABILITY("Sustentabilidade", 0xFF16A34A)
 }
 

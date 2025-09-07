@@ -1,6 +1,7 @@
 package br.com.fiap.onghub.api.response
 
 
+import br.com.fiap.onghub.screens.Category
 import kotlinx.serialization.Serializable
 
 @Serializable
