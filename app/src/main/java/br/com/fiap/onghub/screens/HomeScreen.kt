@@ -25,6 +25,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -99,18 +100,29 @@ fun HomeScreen(
                 vm.onAddressChange("")
                 vm.applyAddress()
             }) { Text("Limpar") }
-            OutlinedButton(onClick = {
-                navController.navigate("dicasVoluntariado")
-            },
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = Color.White,
-                    containerColor = colorResource(id = R.color.azul_padrao)
-                ),
-                border = BorderStroke(1.dp, colorResource(id = R.color.azul_padrao))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
             ) {
-                Text(text = "Dicas")
+                OutlinedButton(
+                    onClick = {
+                        navController.navigate("dicasVoluntariado")
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.White,
+                        containerColor = colorResource(id = R.color.azul_padrao)
+                    ),
+                    border = BorderStroke(1.dp, colorResource(id = R.color.azul_padrao))
+                ) {
+                    Text(text = "Dicas Voluntariado")
+                }
             }
         }
+
+        HorizontalDivider(
+            thickness = 1.dp,
+            color = Color.LightGray
+        )
 
         if (ui.categories.isNotEmpty()) {
             FlowRow(

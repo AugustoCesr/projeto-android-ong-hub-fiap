@@ -1,5 +1,6 @@
 package br.com.fiap.onghub.screens
 
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,11 +11,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -47,7 +49,6 @@ fun DetalhesOrganizacoesScreen(
         factory = DetalheViewModel.Factory
     )
 ) {
-
     when (val st = vm.uiState) {
         DetalheUiState.Loading -> Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
@@ -68,8 +69,11 @@ fun DetalhesOrganizacoesScreen(
                     }
                 )
             }
-        ) { inner -> Box(Modifier.padding(inner), contentAlignment = Alignment.Center) { Text("ONG não encontrada") } }
-
+        ) { inner ->
+            Box(Modifier.padding(inner), contentAlignment = Alignment.Center) {
+                Text("ONG não encontrada")
+            }
+        }
         is DetalheUiState.Error -> Scaffold(
             topBar = {
                 TopAppBar(
@@ -95,7 +99,6 @@ fun DetalhesOrganizacoesScreen(
                 OutlinedButton(onClick = vm::load) { Text("Tentar novamente") }
             }
         }
-
         is DetalheUiState.Success -> {
             val ong = st.ong
             Scaffold(
@@ -103,9 +106,7 @@ fun DetalhesOrganizacoesScreen(
                     TopAppBar(
                         title = { Text(ong.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
                         navigationIcon = {
-                            IconButton(
-                                onClick = { navController.popBackStack() }
-                            ) {
+                            IconButton(onClick = { navController.popBackStack() }) {
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                     contentDescription = "Voltar"
@@ -115,7 +116,7 @@ fun DetalhesOrganizacoesScreen(
                     )
                 }
             ) { inner ->
-                LazyColumn(
+                androidx.compose.foundation.lazy.LazyColumn(
                     modifier = modifier.padding(inner),
                     contentPadding = PaddingValues(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -126,7 +127,7 @@ fun DetalhesOrganizacoesScreen(
                             contentDescription = ong.name,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .aspectRatio(16f/9f)
+                                .aspectRatio(16f / 9f)
                                 .clip(RoundedCornerShape(16.dp)),
                             contentScale = ContentScale.Crop
                         )
@@ -137,7 +138,11 @@ fun DetalhesOrganizacoesScreen(
                             val loc = listOfNotNull(ong.address?.city, ong.address?.state)
                                 .filter { it.isNotBlank() }.joinToString(" - ")
                             if (loc.isNotBlank()) {
-                                Text(loc, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary)
+                                Text(
+                                    loc,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
                             }
                             if (!ong.description.isNullOrBlank()) {
                                 Text(ong.description, style = MaterialTheme.typography.bodyMedium)
@@ -159,15 +164,40 @@ fun DetalhesOrganizacoesScreen(
                     }
                     item {
                         ElevatedCard {
-                            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                                 Text("Endereço", style = MaterialTheme.typography.titleMedium)
+
                                 val addr = ong.address
-                                Text(listOfNotNull(
-                                    addr?.street_name?.let { "$it ${addr.street_number}" }.takeUnless { it.isNullOrBlank() },
+                                val enderecoCompleto = listOfNotNull(
+                                    addr?.street_name?.let { "$it ${addr.street_number}" }
+                                        .takeUnless { it.isNullOrBlank() },
                                     addr?.neighborhood,
-                                    listOfNotNull(addr?.city, addr?.state).filter { !it.isNullOrBlank() }.joinToString(" - "),
+                                    listOfNotNull(addr?.city, addr?.state)
+                                        .filter { !it.isNullOrBlank() }
+                                        .joinToString(" - ")
+                                        .takeIf { it.isNotBlank() },
                                     addr?.cep
-                                ).filter { !it.isNullOrBlank() }.joinToString(", "))
+                                ).filter { !it.isNullOrBlank() }.joinToString(", ")
+
+                                Text(
+                                    if (enderecoCompleto.isNotBlank()) enderecoCompleto
+                                    else "Endereço não informado"
+                                )
+
+                                if (enderecoCompleto.isNotBlank()) {
+                                    Button(onClick = {
+                                        val route = buildString {
+                                            append("mapaOng?")
+                                            append("name=").append(Uri.encode(ong.name))
+                                            append("&address=").append(Uri.encode(enderecoCompleto))
+                                        }
+                                        navController.navigate(route)
+                                    }) {
+                                        Icon(Icons.Filled.LocationOn, contentDescription = null)
+                                        Spacer(Modifier.height(0.dp))
+                                        Text(" Ver no mapa")
+                                    }
+                                }
                             }
                         }
                     }
@@ -177,4 +207,3 @@ fun DetalhesOrganizacoesScreen(
         }
     }
 }
-

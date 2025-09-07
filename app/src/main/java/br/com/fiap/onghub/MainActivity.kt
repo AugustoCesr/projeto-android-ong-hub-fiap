@@ -16,7 +16,7 @@ import androidx.navigation.navArgument
 import br.com.fiap.onghub.screens.DetalhesOrganizacoesScreen
 import br.com.fiap.onghub.screens.DicasDeVoluntarioScreen
 import br.com.fiap.onghub.screens.HomeScreen
-import br.com.fiap.onghub.screens.OrganizacoesScreen
+import br.com.fiap.onghub.screens.MapaOngScreen
 import br.com.fiap.onghub.ui.theme.ONGHubTheme
 
 class MainActivity : ComponentActivity() {
@@ -35,12 +35,6 @@ class MainActivity : ComponentActivity() {
                                 contentPadding = innerPadding
                             )
                         }
-                        composable(route = "organizacoes") {
-                            OrganizacoesScreen(
-                                modifier = Modifier.padding(innerPadding),
-                                navController = navController
-                            )
-                        }
                         composable(
                             route = "detalhesOrganizacoes/{ongId}",
                             arguments = listOf(navArgument("ongId") { type = NavType.StringType })
@@ -52,6 +46,27 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("dicasVoluntariado") {
                             DicasDeVoluntarioScreen(navController)
+                        }
+                        composable(
+                            route = "mapaOng?name={name}&address={address}&lat={lat}&lng={lng}",
+                            arguments = listOf(
+                                navArgument("name") { type = NavType.StringType; defaultValue = "" },
+                                navArgument("address") { type = NavType.StringType; nullable = true; defaultValue = null },
+                                navArgument("lat") { type = NavType.StringType; nullable = true; defaultValue = null },
+                                navArgument("lng") { type = NavType.StringType; nullable = true; defaultValue = null },
+                            )
+                        ) { backStackEntry ->
+                            val name = backStackEntry.arguments?.getString("name").orEmpty()
+                            val address = backStackEntry.arguments?.getString("address")
+                            val lat = backStackEntry.arguments?.getString("lat")?.toDoubleOrNull()
+                            val lng = backStackEntry.arguments?.getString("lng")?.toDoubleOrNull()
+                            MapaOngScreen(
+                                navController = navController,
+                                name = name,
+                                address = address,
+                                latArg = lat,
+                                lngArg = lng
+                            )
                         }
 
                     }
