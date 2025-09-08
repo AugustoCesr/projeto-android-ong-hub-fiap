@@ -1,4 +1,4 @@
-package br.com.fiap.onghub.ui.home.model
+package br.com.fiap.onghub.ui.home
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue

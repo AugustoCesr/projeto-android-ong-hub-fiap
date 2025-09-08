@@ -1,4 +1,4 @@
-package br.com.fiap.onghub.ui.home.model
+package br.com.fiap.onghub.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
