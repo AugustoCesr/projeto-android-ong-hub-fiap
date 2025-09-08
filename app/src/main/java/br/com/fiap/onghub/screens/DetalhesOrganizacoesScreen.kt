@@ -1,11 +1,7 @@
 package br.com.fiap.onghub.screens
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,14 +20,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Link
 import androidx.compose.material.icons.rounded.Phone
 import androidx.compose.material.icons.rounded.Pix
 import androidx.compose.material.icons.rounded.Place
 import androidx.compose.material.icons.rounded.Public
-import androidx.compose.material.icons.rounded.VolunteerActivism
 import androidx.compose.material.icons.rounded.Whatsapp
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -52,13 +49,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import br.com.fiap.onghub.ui.home.DetalheUiState
 import br.com.fiap.onghub.ui.home.DetalheViewModel
 import coil.compose.AsyncImage
-import androidx.core.net.toUri
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -93,7 +89,11 @@ fun DetalhesOrganizacoesScreen(
                     }
                 )
             }
-        ) { inner -> Box(Modifier.padding(inner), contentAlignment = Alignment.Center) { Text("ONG não encontrada") } }
+        ) { inner ->
+            Box(Modifier.padding(inner), contentAlignment = Alignment.Center) {
+                Text("ONG não encontrada")
+            }
+        }
 
         is DetalheUiState.Error -> Scaffold(
             topBar = {
@@ -126,7 +126,9 @@ fun DetalhesOrganizacoesScreen(
             Scaffold(
                 topBar = {
                     TopAppBar(
-                        title = { Text(ong.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                        title = {
+                            Text(ong.name, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        },
                         navigationIcon = {
                             IconButton(
                                 onClick = { navController.popBackStack() }
@@ -242,8 +244,11 @@ fun DetalhesOrganizacoesScreen(
 
                     item {
                         ElevatedCard {
-                            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                                Text("Contato & Endereço", style = MaterialTheme.typography.titleMedium)
+                            Column(
+                                Modifier.padding(16.dp),
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Text("Contato", style = MaterialTheme.typography.titleMedium)
 
                                 if (!ong.phone.isNullOrBlank()) {
                                     InfoLine(Icons.Rounded.Phone, "Telefone: ${ong.phone}")
@@ -251,23 +256,46 @@ fun DetalhesOrganizacoesScreen(
                                 if (!ong.email.isNullOrBlank()) {
                                     InfoLine(Icons.Rounded.Email, "E-mail: ${ong.email}")
                                 }
+                            }
+                        }
+                    }
+                    item {
+                        ElevatedCard {
+                            Column(
+                                Modifier.padding(16.dp),
+                                verticalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                Text("Endereço", style = MaterialTheme.typography.titleMedium)
 
                                 val addr = ong.address
-                                val addressLine = listOfNotNull(
-                                    addr?.street_name?.takeIf { it.isNotBlank() }?.let { name ->
-                                        val num = addr.street_number ?: ""
-                                        "$name $num".trim()
-                                    },
-                                    addr?.neighborhood?.takeIf { it.isNotBlank() },
-                                    listOfNotNull(
-                                        addr?.city,
-                                        addr?.state
-                                    ).filter { it.isNotBlank() }.joinToString(" - ").takeIf { it.isNotBlank() },
-                                    addr?.cep?.takeIf { it.isNotBlank() }
-                                ).joinToString(", ")
+                                val enderecoCompleto = listOfNotNull(
+                                    addr?.street_name?.let { "$it ${addr.street_number}" }
+                                        .takeUnless { it.isNullOrBlank() },
+                                    addr?.neighborhood,
+                                    listOfNotNull(addr?.city, addr?.state)
+                                        .filter { it.isNotBlank() }
+                                        .joinToString(" - ")
+                                        .takeIf { it.isNotBlank() },
+                                    addr?.cep
+                                ).filter { it.isNotBlank() }.joinToString(", ")
 
-                                if (addressLine.isNotBlank()) {
-                                    InfoLine(Icons.Rounded.Place, addressLine)
+                                Text(
+                                    enderecoCompleto.ifBlank { "Endereço não informado" }
+                                )
+
+                                if (enderecoCompleto.isNotBlank()) {
+                                    Button(onClick = {
+                                        val route = buildString {
+                                            append("mapaOng?")
+                                            append("name=").append(Uri.encode(ong.name))
+                                            append("&address=").append(Uri.encode(enderecoCompleto))
+                                        }
+                                        navController.navigate(route)
+                                    }) {
+                                        Icon(Icons.Filled.LocationOn, contentDescription = null)
+                                        Spacer(Modifier.height(0.dp))
+                                        Text(" Ver no mapa")
+                                    }
                                 }
                             }
                         }

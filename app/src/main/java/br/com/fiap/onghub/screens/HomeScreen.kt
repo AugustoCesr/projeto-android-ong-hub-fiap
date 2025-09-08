@@ -80,6 +80,46 @@ fun HomeScreen(
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         HeaderOng()
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            HorizontalDivider(
+                modifier = Modifier.padding(vertical = 8.dp),
+                thickness = 1.dp,
+                color = Color.LightGray
+            )
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedButton(
+                    onClick = {
+                        navController.navigate("dicasVoluntariado")
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.White,
+                        containerColor = colorResource(id = R.color.black)
+                    ),
+                    border = BorderStroke(1.dp, colorResource(id = R.color.black)),
+                    elevation = ButtonDefaults.buttonElevation(4.dp)
+                ) {
+                    Text(text = "Dicas de Voluntariado")
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedButton(
+                    onClick = {
+                        navController.navigate("curiosidadesOngs")
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.White,
+                        containerColor = colorResource(id = R.color.black)
+                    ),
+                    border = BorderStroke(1.dp, colorResource(id = R.color.black)),
+                    elevation = ButtonDefaults.buttonElevation(4.dp)
+                ) {
+                    Text(text = "Curiosidades")
+                }
+            }
+            HorizontalDivider(
+                thickness = 1.dp,
+                color = Color.LightGray
+            )
+        }
 
         OutlinedTextField(
             value = ui.addressInput,
@@ -107,132 +147,94 @@ fun HomeScreen(
                     }
                 ) { Text("Limpar") }
             }
-            HorizontalDivider(
-                modifier = Modifier.padding(vertical = 8.dp),
-                thickness = 1.dp,
-                color = Color.LightGray
-            )
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedButton(
-                    onClick = {
-                        navController.navigate("dicasVoluntariado")
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = Color.White,
-                        containerColor = colorResource(id = R.color.azul_padrao)
-                    ),
-                    border = BorderStroke(1.dp, colorResource(id = R.color.azul_padrao)),
-                    elevation = ButtonDefaults.buttonElevation(4.dp)
+            if (ui.categories.isNotEmpty()) {
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = "Dicas de Voluntariado")
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                OutlinedButton(
-                    onClick = {
-                        navController.navigate("curiosidadesOngs")
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = Color.White,
-                        containerColor = colorResource(id = R.color.azul_padrao)
-                    ),
-                    border = BorderStroke(1.dp, colorResource(id = R.color.azul_padrao)),
-                    elevation = ButtonDefaults.buttonElevation(4.dp)
-                ) {
-                    Text(text = "Curiosidades")
-                }
-            }
-        }
-        HorizontalDivider(
-            thickness = 1.dp,
-            color = Color.LightGray
-        )
-        if (ui.categories.isNotEmpty()) {
-            FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                ui.categories.forEach { cat ->
-                    val selected = ui.selectedCategory == cat
-                    FilterChip(
-                        selected = selected,
-                        onClick = { vm.toggleCategory(cat) },
-                        shape = CircleShape,
-                        label = { Text(cat.label) },
-                        colors = FilterChipDefaults.filterChipColors(
-                            containerColor = cat.color.copy(alpha = 0.16f),
-                            labelColor = cat.color,
-                            iconColor = cat.color,
-                            selectedContainerColor = cat.color,
-                            selectedLabelColor = Color.White,
-                            selectedLeadingIconColor = Color.White
-                        ),
-                        border = FilterChipDefaults.filterChipBorder(
-                            borderColor = cat.color.copy(alpha = 0.6f),
-                            selectedBorderColor = cat.color,
-                            enabled = true,
+                    ui.categories.forEach { cat ->
+                        val selected = ui.selectedCategory == cat
+                        FilterChip(
                             selected = selected,
+                            onClick = { vm.toggleCategory(cat) },
+                            shape = CircleShape,
+                            label = { Text(cat.label) },
+                            colors = FilterChipDefaults.filterChipColors(
+                                containerColor = cat.color.copy(alpha = 0.16f),
+                                labelColor = cat.color,
+                                iconColor = cat.color,
+                                selectedContainerColor = cat.color,
+                                selectedLabelColor = Color.White,
+                                selectedLeadingIconColor = Color.White
+                            ),
+                            border = FilterChipDefaults.filterChipBorder(
+                                borderColor = cat.color.copy(alpha = 0.6f),
+                                selectedBorderColor = cat.color,
+                                enabled = true,
+                                selected = selected,
+                            )
                         )
-                    )
-                }
-            }
-        }
-
-        LazyColumn(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(bottom = 12.dp)
-        ) {
-            items(ui.items) { ong ->
-                ElevatedCard(onClick = { navController.navigate("detalhesOrganizacoes/${ong.id}") }) {
-                    Column(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(12.dp)
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            AsyncImage(
-                                model = ong.card_image ?: ong.images?.firstOrNull(),
-                                contentDescription = ong.name,
-                                modifier = Modifier.size(64.dp),
-                                contentScale = ContentScale.Crop
-                            )
-                            Spacer(Modifier.width(12.dp))
-                            Column(Modifier.weight(1f)) {
-                                Text(ong.name, style = MaterialTheme.typography.titleMedium)
-                                val loc = listOfNotNull(ong.address?.city, ong.address?.state)
-                                    .filter { it.isNotBlank() }.joinToString(" - ")
-                                if (loc.isNotBlank()) {
-                                    Text(
-                                        loc,
-                                        style = MaterialTheme.typography.labelMedium,
-                                        color = MaterialTheme.colorScheme.primary
-                                    )
-                                }
-                            }
-                        }
-                        val desc = ong.description.orEmpty()
-                        if (desc.isNotBlank()) {
-                            Spacer(Modifier.height(8.dp))
-                            Text(
-                                desc,
-                                maxLines = 3,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
                     }
                 }
             }
 
-            item {
-                when {
-                    ui.isLoading -> LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-                    ui.error != null -> Text(
-                        "Não encontrado",
-                        color = MaterialTheme.colorScheme.error
-                    )
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(bottom = 12.dp)
+            ) {
+                items(ui.items) { ong ->
+                    ElevatedCard(onClick = { navController.navigate("detalhesOrganizacoes/${ong.id}") }) {
+                        Column(
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(12.dp)
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                AsyncImage(
+                                    model = ong.card_image ?: ong.images?.firstOrNull(),
+                                    contentDescription = ong.name,
+                                    modifier = Modifier.size(64.dp),
+                                    contentScale = ContentScale.Crop
+                                )
+                                Spacer(Modifier.width(12.dp))
+                                Column(Modifier.weight(1f)) {
+                                    Text(ong.name, style = MaterialTheme.typography.titleMedium)
+                                    val loc = listOfNotNull(ong.address?.city, ong.address?.state)
+                                        .filter { it.isNotBlank() }.joinToString(" - ")
+                                    if (loc.isNotBlank()) {
+                                        Text(
+                                            loc,
+                                            style = MaterialTheme.typography.labelMedium,
+                                            color = MaterialTheme.colorScheme.primary
+                                        )
+                                    }
+                                }
+                            }
+                            val desc = ong.description.orEmpty()
+                            if (desc.isNotBlank()) {
+                                Spacer(Modifier.height(8.dp))
+                                Text(
+                                    desc,
+                                    maxLines = 3,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    }
+                }
 
-                    ui.hasMore -> LaunchedEffect(ui.page) { vm.loadNext() }
+                item {
+                    when {
+                        ui.isLoading -> LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                        ui.error != null -> Text(
+                            "Não encontrado",
+                            color = MaterialTheme.colorScheme.error
+                        )
+
+                        ui.hasMore -> LaunchedEffect(ui.page) { vm.loadNext() }
+                    }
                 }
             }
         }
