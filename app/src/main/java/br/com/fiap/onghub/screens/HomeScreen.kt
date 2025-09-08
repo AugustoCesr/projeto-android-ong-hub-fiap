@@ -91,19 +91,28 @@ fun HomeScreen(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(14.dp),
         )
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(onClick = {
-                fm.clearFocus()
-                vm.applyAddress()
-            }) { Text("Buscar") }
-            OutlinedButton(onClick = {
-                vm.onAddressChange("")
-                vm.applyAddress()
-            }) { Text("Limpar") }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            ) {
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                Button(
+                    onClick = {
+                        fm.clearFocus()
+                        vm.applyAddress()
+                    },
+                    elevation = ButtonDefaults.buttonElevation(4.dp)
+                ) { Text("Buscar") }
+                OutlinedButton(
+                    onClick = {
+                        vm.onAddressChange("")
+                        vm.applyAddress()
+                    }
+                ) { Text("Limpar") }
+            }
+            HorizontalDivider(
+                modifier = Modifier.padding(vertical = 8.dp),
+                thickness = 1.dp,
+                color = Color.LightGray
+            )
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedButton(
                     onClick = {
                         navController.navigate("dicasVoluntariado")
@@ -112,18 +121,31 @@ fun HomeScreen(
                         contentColor = Color.White,
                         containerColor = colorResource(id = R.color.azul_padrao)
                     ),
-                    border = BorderStroke(1.dp, colorResource(id = R.color.azul_padrao))
+                    border = BorderStroke(1.dp, colorResource(id = R.color.azul_padrao)),
+                    elevation = ButtonDefaults.buttonElevation(4.dp)
                 ) {
-                    Text(text = "Dicas Voluntariado")
+                    Text(text = "Dicas de Voluntariado")
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedButton(
+                    onClick = {
+                        navController.navigate("curiosidadesOngs")
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.White,
+                        containerColor = colorResource(id = R.color.azul_padrao)
+                    ),
+                    border = BorderStroke(1.dp, colorResource(id = R.color.azul_padrao)),
+                    elevation = ButtonDefaults.buttonElevation(4.dp)
+                ) {
+                    Text(text = "Curiosidades")
                 }
             }
         }
-
         HorizontalDivider(
             thickness = 1.dp,
             color = Color.LightGray
         )
-
         if (ui.categories.isNotEmpty()) {
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -163,7 +185,11 @@ fun HomeScreen(
         ) {
             items(ui.items) { ong ->
                 ElevatedCard(onClick = { navController.navigate("detalhesOrganizacoes/${ong.id}") }) {
-                    Column(Modifier.fillMaxWidth().padding(12.dp)) {
+                    Column(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp)
+                    ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             AsyncImage(
                                 model = ong.card_image ?: ong.images?.firstOrNull(),
@@ -188,7 +214,11 @@ fun HomeScreen(
                         val desc = ong.description.orEmpty()
                         if (desc.isNotBlank()) {
                             Spacer(Modifier.height(8.dp))
-                            Text(desc, maxLines = 3, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text(
+                                desc,
+                                maxLines = 3,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
                         }
                     }
                 }
@@ -197,7 +227,11 @@ fun HomeScreen(
             item {
                 when {
                     ui.isLoading -> LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-                    ui.error != null -> Text("Não encontrado", color = MaterialTheme.colorScheme.error)
+                    ui.error != null -> Text(
+                        "Não encontrado",
+                        color = MaterialTheme.colorScheme.error
+                    )
+
                     ui.hasMore -> LaunchedEffect(ui.page) { vm.loadNext() }
                 }
             }

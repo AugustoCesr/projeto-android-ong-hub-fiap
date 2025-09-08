@@ -13,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import br.com.fiap.onghub.screens.CuriosidadesOngsScreen
 import br.com.fiap.onghub.screens.DetalhesOrganizacoesScreen
 import br.com.fiap.onghub.screens.DicasDeVoluntarioScreen
 import br.com.fiap.onghub.screens.HomeScreen
@@ -46,6 +47,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("dicasVoluntariado") {
                             DicasDeVoluntarioScreen(navController)
+                        }
+                        composable("curiosidadesOngs") {
+                            CuriosidadesOngsScreen(navController = navController)
                         }
                         composable(
                             route = "mapaOng?name={name}&address={address}&lat={lat}&lng={lng}",
